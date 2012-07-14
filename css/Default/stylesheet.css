@@ -1,0 +1,56 @@
+html
+{
+  overflow-x:hidden !important;
+  overflow-y:scroll !important;
+  height: 100%;
+}
+
+img
+{
+  border:none;
+  padding:0px;
+  margin:0px;
+}
+
+a
+{
+  color:#1777ce;
+}
+
+a:hover
+{
+  text-decoration:underline;
+}
+
+a:active
+{
+
+}
+
+a.right_col
+{
+  text-decoration:none;
+}
+
+a.right_col:hover
+{
+  text-decoration:underline;
+}
+
+hr
+{
+  border:none;
+  color:#999;
+  height:1px;
+  width:100%;
+  text-align:left;
+  border-bottom:1px solid #999;
+}
+
+#page
+{
+  border-left:1px solid #999;
+  border-right:1px solid #999;
+  background:#fff;
+}
+
