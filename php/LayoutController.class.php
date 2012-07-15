@@ -175,7 +175,7 @@ abstract class LayoutController extends HTMLFormatter
 
     echo "<script type='text/javascript' language='javascript'>" . PHP_EOL
         ."  var pageManager;" . PHP_EOL
-        ."  addScript('/cpf/js/page_manager.js'," . PHP_EOL
+        ."  addScript('/CPF/js/page_manager.js'," . PHP_EOL
         ."    function() {" . PHP_EOL
         ."       pageManager = new PageManager('".$uri."');" . PHP_EOL
         ."    });" . PHP_EOL
@@ -234,7 +234,7 @@ abstract class LayoutController extends HTMLFormatter
         ."width: 100%; overflow: hidden; "
         ."}" . PHP_EOL;
     echo ".threecolumn { "
-        ."background: #ff9; "
+        ."background: #fff; "
         ."}" . PHP_EOL;
     echo ".threecolumn .hidden { "
         ."visibility: hidden; "
@@ -242,12 +242,12 @@ abstract class LayoutController extends HTMLFormatter
     echo ".threecolumn .colcenter { "
         ."float: left; position: relative; width: 200%; right: 100%; "
         ."margin-left: " . $pageLeftMargin . "px; "
-        ."background: #fef; "
+        ."background: #fff; "
         ."}" . PHP_EOL;
     echo ".threecolumn .colleft { "
         ."float: left; position: relative; width: 100%; margin-left: -50%; "
         ."left: " . $leftColumnLeftOffset . "px; "
-        ."background: #FFD8B7; "
+        ."background: #f0f0f0; "
         ."}" . PHP_EOL;
     echo ".threecolumn .col1wrap { "
         ."float: left; position: relative; width: 50%; "

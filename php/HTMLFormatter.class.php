@@ -38,7 +38,7 @@ class HTMLFormatter
     $this->mCSSPrefix = array("default");
     $this->mDivsArray = array(0);
     $this->mStylePath = $stylePath;
-    $this->mScriptPath = "/cpf/js";
+    $this->mScriptPath = "/CPF/js";
     $this->mPageLevel = $pageLevel;
     $this->mTableLevel = 0;
   }

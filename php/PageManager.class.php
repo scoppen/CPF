@@ -37,6 +37,7 @@ class PageManager extends LayoutController
   private $mPageHeight;
   private $mPageURI;
   private $mPageScripts;
+  private $mPlugInScripts;
  
   public function __construct($level = 0, $configFile = 'config.php')
   {
@@ -84,6 +85,7 @@ class PageManager extends LayoutController
 
     $this->mPageURI = "";
     $this->mPageScripts = array();
+    $this->mPlugInScripts = array();
   }
 
   private function __clone() { }
@@ -133,16 +135,39 @@ class PageManager extends LayoutController
     $this->mPageScripts[] = $scriptFile;
   }
 
+  public function addPlugIn($plugInDir)
+  {
+    include_once("CPF/plugins/".$plugInDir."/manifest.php");
+    $dependencies = getPlugInDependencies();
+
+    if (array_key_exists('types', $dependencies) &&
+        in_array('js', $dependencies['types']) &&
+        array_key_exists('js', $dependencies))
+    {
+      foreach ($dependencies['js'] as &$value)
+      {
+        $jsfile = $plugInDir."/".$value;
+        $this->mPlugInScripts[] = $jsfile;
+      }
+    }
+  }
+
   protected function defineHeaderScripts($uri)
   {
     parent::defineHeaderScripts($uri);
     
+    foreach ($this->mPlugInScripts as $value)
+    {
+      echo "<script type='text/javascript' "
+          ."src='/CPF/plugins/".$value."'></script>" . PHP_EOL;
+    }
+
     foreach ($this->mPageScripts as $value)
     {
       echo "<script type='text/javascript' "
           ."src='".$this->getScriptPath()."/".$value."'></script>" . PHP_EOL;
     }
-
+    
     echo "<script type='text/javascript' language='javascript'>" . PHP_EOL
         ."  var pageManager;" . PHP_EOL
         ."  addScript('".$this->getScriptPath()."/page_manager.js'," . PHP_EOL
@@ -161,6 +186,28 @@ class PageManager extends LayoutController
         ."    }, 50);" . PHP_EOL
         ."  };" . PHP_EOL
         ."</script>" . PHP_EOL;
+  }
+
+  protected function displayHeader()
+  {
+
+  }
+
+  protected function displayLeftSideBar()
+  {
+
+  }
+
+  protected function displayRightSideBar()
+  {
+
+  }
+
+  protected function displayFooter()
+  {
+    echo "<p align='right'>Data presented using "
+        ."<a href='http://www.github.com/scoppen/CPF'>CPF</a>"
+        ." v0.5&nbsp;&nbsp;";
   }
 
   public function beginPage($title, $uri = "", $screenWidth = 800, $screenHeight = 400)
@@ -211,9 +258,9 @@ class PageManager extends LayoutController
     if ($this->isRegistered())
     {
       parent::beginPageLeftSideBar();
-      $this->displayLeftSideBarContent();
+      $this->displayLeftSideBar();
       parent::beginPageRightSideBar();
-      $this->displayRightSideBarContent();
+      $this->displayRightSideBar();
       parent::beginPageFooter();
       $this->displayFooter();
     }
