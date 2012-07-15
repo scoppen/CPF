@@ -14,7 +14,7 @@ exchange includes client window size such that PHP/JS code can determine ideal l
 
 Basic setup:
  * add an alias for CPF to the full path:
-
+```
     Alias /CPF/ "/usr/share/PHP/CPF/"
 
     <Directory "/usr/share/PHP/CPF">
@@ -23,7 +23,7 @@ Basic setup:
       Order allow, deny
       Allow from all
     </Directory>
-
+```
  * make sure every webpage has a corresponding JS file:
     ie. file 'index.php' would require 'index.php.js'
 
