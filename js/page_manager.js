@@ -28,11 +28,7 @@ var onPageContentLoaded;
 function PageManager(page) {
     this.page = page;
 
-    try { xmlhttp = new XMLHttpRequest(); } // all except IE
-    catch (e) { // IE
-        try { xmlhttp = new ActiveXObject("Msxml2.XMLHTTP"); }
-        catch (e) { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
-    }
+    xmlhttp = getXmlHttpObject();
 
     this.getWidth = function() {
         if (self.innerWidth) // all except IE

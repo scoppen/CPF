@@ -1,6 +1,6 @@
 <?php
 /**
- * @name DBmysql class for CPF
+ * @name MySQL class for CPF
  * @version 0.5 [July 14, 2012]
  * @author Scott W Coppen
  * @fileoverview
@@ -23,7 +23,9 @@
  * limitations under the License.
  */
 
-class DBmysql
+require_once("CPF/php/Interfaces.php");
+
+class MySQL implements IDatabase
 {
     private $mConnection;
     private $mDatabase;
@@ -50,12 +52,12 @@ class DBmysql
         if (!$this->mConnection)
         {
             $this->mLastError = mysql_error();
-	    error_log("DBmysql::Connect() failed - ".$this->mLastError);
+	    error_log("MySQL::Connect() failed - ".$this->mLastError);
             return false;
         }
 
         if ($this->mLogFile)
-            error_log("DBmysql::Connect() to ".$dbServer." succeeded",
+            error_log("MySQL::Connect() to ".$dbServer." succeeded",
                       3, $this->mLogFile);
         return true;
     }
@@ -65,19 +67,19 @@ class DBmysql
         if (!$this->mConnection)
         {
             $this->mLastError = "open() called without a connection";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return false;
         }
 
         if (!mysql_select_db($dbName, $this->mConnection))
         {
             $this->mLastError = mysql_error();
-            error_log("DBmysql::open() failed - ".$this->mLastError);
+            error_log("MySQL::open() failed - ".$this->mLastError);
             return false;
         }
 
         if ($this->mLogFile)
-            error_log("DBmysql::open() of ".$dbName." succeeded",
+            error_log("MySQL::open() of ".$dbName." succeeded",
                       3, $this->mLogFile);
         $this->mDatabase = $dbName;
         return true;
@@ -88,7 +90,7 @@ class DBmysql
         if (!$this->mDatabase)
         {
             $this->mLastError = "query() called without active database";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
@@ -99,12 +101,12 @@ class DBmysql
         if (!$res)
         {
             $this->mLastError = mysql_error();
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
         if ($this->mLogFile)
-            error_log("DBmysql::query() of ".$sql." succeeded",
+            error_log("MySQL::query() of ".$sql." succeeded",
                       3, $this->mLogFile);
         $this->mQueryResults[$dbQuery] = $res;
         return $dbQuery;
@@ -178,7 +180,7 @@ class DBmysql
         if (!$this->mDatabase)
         {
             $this->mLastError = "queryTableAttributesRow() called without active database";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
@@ -191,7 +193,7 @@ class DBmysql
         if (!$res)
         {
             $this->mLastError = mysql_error();
-            error_log("DBmysql::queryTableAttributesRow() failed - ".$this->mLastError);
+            error_log("MySQL::queryTableAttributesRow() failed - ".$this->mLastError);
             return;
         }
 
@@ -203,7 +205,7 @@ class DBmysql
         if (!$this->mDatabase)
         {
             $this->mLastError = "querySchemaRow() called without active database";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
@@ -217,7 +219,7 @@ class DBmysql
         if (!$res)
         {
             $this->mLastError = mysql_error();
-            error_log("DBmysql::querySchemaRow() failed - ".$this->mLastError);
+            error_log("MySQL::querySchemaRow() failed - ".$this->mLastError);
             return;
         }
 
@@ -229,7 +231,7 @@ class DBmysql
         if (!$this->mDatabase)
         {
             $this->mLastError = "querySchemaColumn() called without active database";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
@@ -242,7 +244,7 @@ class DBmysql
         if (!$res)
         {
             $this->mLastError = mysql_error();
-            error_log("DBmysql::querySchemaColumn() failed - ".$this->mLastError);
+            error_log("MySQL::querySchemaColumn() failed - ".$this->mLastError);
             return;
         }
 
@@ -261,7 +263,7 @@ class DBmysql
         if (!$this->mDatabase)
         {
             $this->mLastError = "flushTable() called without active database";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return;
         }
 
@@ -379,7 +381,7 @@ class DBmysql
         if (!isset($this->mQueryResults[$queryId]))
         {
             $this->mLastError = "fetchRow() called without valid query";
-            error_log("DBmysql::".$this->mLastError);
+            error_log("MySQL::".$this->mLastError);
             return false;
         }
 

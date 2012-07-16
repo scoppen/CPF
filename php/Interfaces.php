@@ -25,6 +25,24 @@
 
 require_once("CPF/php/PageManager.class.php");
 
+interface IDatabase
+{
+  function isConnected();
+  function getDatabase();
+  function getTableAutoIncrement($tableName);
+  function getTableComment($tableName);
+  function getTableIsNullables($tableName);
+  function getTableDataTypes($tableName);
+  function getTableColumnTypes($tableName);
+  function getTableColumnComments($tableName);
+  function getTableNumericPrecisions($tableName);
+  function getTableCharacterMaxLengths($tableName);
+  function getTableCharacterOctetLengths($tableName);
+  function getTableEnumeratorColumn($tableName);
+  function getTableEnumerationArray($tableName);
+  function select($query);
+}
+
 interface IPageNode
 {
   function __construct(PageManager $pageMgr);
@@ -33,7 +51,7 @@ interface IPageNode
 
 interface IPageDBAdapter extends IPageNode
 {
-  function configure(DBmysql $database, $tableName);
+  function configure(IDatabase $database, $tableName);
 }
 
 ?>

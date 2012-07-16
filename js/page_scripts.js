@@ -79,3 +79,16 @@ function submitForm(form)
   document.forms[form].submit();
 }
 
+function getXmlHttpObject()
+{
+  var xmlhttp = null;
+  try { xmlhttp = new XMLHttpRequest(); } // all except IE
+  catch (e) // IE
+  {
+    try { xmlhttp = new ActiveXObject("Msxml2.XMLHTTP"); }
+    catch (e) { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+  }
+
+  return xmlhttp;
+}
+

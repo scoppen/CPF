@@ -160,27 +160,13 @@ abstract class LayoutController extends HTMLFormatter
 
   public function beginPopup($title, $uri, $screenWidth, $screenHeight)
   {
-    parent::beginPage($title);
+    parent::beginPage($title, $uri);
   
     $pageMinWidth = ($screenWidth < 640) ? $screenWidth - 20 : 620;
     $this->mPageMinWidth = $pageMinWidth - 50; 
     $this->mLeftSideBarWidth = 0;
     $this->mRightSideBarWidth = 0;
 
-    if (!empty($_SERVER) && !empty($_SERVER['PHP_SELF']))
-    {
-      echo "<script type='text/javascript' "
-          ."src='".$_SERVER['PHP_SELF'].".js'></script>" . PHP_EOL;
-    }
-
-    echo "<script type='text/javascript' language='javascript'>" . PHP_EOL
-        ."  var pageManager;" . PHP_EOL
-        ."  addScript('/CPF/js/page_manager.js'," . PHP_EOL
-        ."    function() {" . PHP_EOL
-        ."       pageManager = new PageManager('".$uri."');" . PHP_EOL
-        ."    });" . PHP_EOL
-        ."</script>" . PHP_EOL;
-    
     echo "<style type=text/css>" . PHP_EOL;
     echo "<!--" . PHP_EOL;
     echo "body { "
@@ -216,6 +202,11 @@ abstract class LayoutController extends HTMLFormatter
     echo "</style>" . PHP_EOL;
     
     $this->beginBody();
+  }
+
+  public function endPopup()
+  {
+    parent::endPage();
   }
 
   private function layoutThreeColumn()

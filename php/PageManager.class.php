@@ -38,6 +38,7 @@ class PageManager extends LayoutController
   private $mPageURI;
   private $mPageScripts;
   private $mPlugInScripts;
+  private $mPlugInStyles;
  
   public function __construct($level = 0, $configFile = 'config.php')
   {
@@ -86,6 +87,7 @@ class PageManager extends LayoutController
     $this->mPageURI = "";
     $this->mPageScripts = array();
     $this->mPlugInScripts = array();
+    $this->mPlugInStyles = array();
   }
 
   private function __clone() { }
@@ -140,14 +142,26 @@ class PageManager extends LayoutController
     include_once("CPF/plugins/".$plugInDir."/manifest.php");
     $dependencies = getPlugInDependencies();
 
-    if (array_key_exists('types', $dependencies) &&
-        in_array('js', $dependencies['types']) &&
+    if (!array_key_exists('types', $dependencies))
+      return;
+
+    if (in_array('js', $dependencies['types']) &&
         array_key_exists('js', $dependencies))
     {
       foreach ($dependencies['js'] as &$value)
       {
         $jsfile = $plugInDir."/".$value;
         $this->mPlugInScripts[] = $jsfile;
+      }
+    }
+
+    if (in_array('css', $dependencies['types']) &&
+        array_key_exists('css', $dependencies))
+    {
+      foreach ($dependencies['css'] as &$value)
+      {
+        $cssfile = $plugInDir."/".$value;
+        $this->mPlugInStyles[] = $cssfile;
       }
     }
   }
@@ -186,6 +200,12 @@ class PageManager extends LayoutController
         ."    }, 50);" . PHP_EOL
         ."  };" . PHP_EOL
         ."</script>" . PHP_EOL;
+
+    foreach ($this->mPlugInStyles as $value)
+    {
+      echo "<link rel='stylesheet' type='text/css' "
+          ."href='/CPF/plugins/".$value."'></link>" . PHP_EOL;
+    }
   }
 
   protected function displayHeader()
@@ -250,7 +270,7 @@ class PageManager extends LayoutController
     }
 
     parent::beginPopup($title, $uri, $screenWidth, $screenHeight);
-    parent::beginPageContent();
+    echo "<div id='content_body' name='content_body'></div>" . PHP_EOL;
   }
 
   public function endPage()
@@ -270,7 +290,7 @@ class PageManager extends LayoutController
   
   public function endPopup()
   {
-    
+    parent::endPopup();
   }
 }
 
