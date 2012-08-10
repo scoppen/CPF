@@ -36,7 +36,7 @@ abstract class LayoutController extends HTMLFormatter
   private $mScripts;
 
   protected function __construct($stylePath, $pageMinWidth,
-      $leftSideBarWidth, $rightSideBarWidth, $padding = 10)
+      $leftSideBarWidth, $rightSideBarWidth, $padding = 8)
   {
     parent::__construct($stylePath, 0);
     $this->mPageTitle = $pageTitle;
@@ -117,8 +117,9 @@ abstract class LayoutController extends HTMLFormatter
   public function beginPage($title, $uri, $screenWidth, $screenHeight)
   {
     parent::beginPage($title, $uri);
-   
-    $pageMinWidth = ($screenWidth < 800) ? $screenWidth : 800;
+    
+    $pageWidth = $this->mPageMinWidth + $this->mLeftSideBarWidth + $this->mRightSideBarWidth; 
+    $pageMinWidth = ($screenWidth < $pageWidth) ? $screenWidth : $pageWidth;
 
     echo "<style type=text/css>" . PHP_EOL;
     echo "<!--" . PHP_EOL;
@@ -138,7 +139,7 @@ abstract class LayoutController extends HTMLFormatter
         ."}" . PHP_EOL;
     echo "#header { "
         ."clear: both; float: left; width: 100%; "
-        ."border-bottom: 1px solid #000; "
+//        ."border-bottom: 1px solid #000; "
         ."}" . PHP_EOL;
     echo "#menu { "
         ."width: " . $pageMinWidth . "px; "
@@ -150,7 +151,7 @@ abstract class LayoutController extends HTMLFormatter
 
     echo "#footer { "
         ."clear: both; float: left; width: 100%; "
-        ."border-top: 1px solid #000; "
+        ."border-top: 1px solid #111; "
         ."}" . PHP_EOL;
     echo "-->" . PHP_EOL;
     echo "</style>" . PHP_EOL;
@@ -238,7 +239,7 @@ abstract class LayoutController extends HTMLFormatter
     echo ".threecolumn .colleft { "
         ."float: left; position: relative; width: 100%; margin-left: -50%; "
         ."left: " . $leftColumnLeftOffset . "px; "
-        ."background: #f0f0f0; "
+//        ."background: #f0f0f0; "
         ."}" . PHP_EOL;
     echo ".threecolumn .col1wrap { "
         ."float: left; position: relative; width: 50%; "

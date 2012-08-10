@@ -28,12 +28,38 @@ class FileUtils
   public static function dirsAsArray($dirPath)
   {
     $dirs = array();
-    foreach (array_diff(scandir($dirPath), array('.','..')) as $f)
-      if (is_dir($dirPath."/".$f))
-        $dirs[] = $f;
+    $files = array_diff(scandir($dirPath), array('.', '..'));
+    foreach ($files as $file)
+    {
+      if (is_dir($dirPath."/".$file))
+        $dirs[] = $file;
+    }
 
     return $dirs;
   }
+
+  public static function pathAsArray($dirPath)
+  {
+    return explode('/', $dirPath);
+  }
+
+  public static function pagesAsArray($dirPath)
+  {
+    $pages = array();
+    $files = array_diff(scandir($dirPath), array('.', '..'));
+    foreach ($files as $file)
+    {
+      if (is_dir($dirPath."/".$file) || (strlen($file) < 3) ||
+          (substr_compare($file, '.js', -3) === 0))
+        continue;
+
+      if ((substr_compare($file, '.php', -4) === 0) &&
+          in_array($file.'.js', $files))
+        $pages[] = $file;
+    }
+
+    return $pages;
+  } 
 
   public static function loadFile($filename)
   {

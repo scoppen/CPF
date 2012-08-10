@@ -32,6 +32,7 @@ class PageManager extends LayoutController
   private $mRootPath;
   private $mBasePath;
   private $mTopPath;
+  private $mSubPath;
   private $mRegistered;
   private $mPageWidth;
   private $mPageHeight;
@@ -61,6 +62,9 @@ class PageManager extends LayoutController
     $array = explode('/', $this->mBasePath);
     $this->mTopPath =
         implode('/',array_slice($array, 0, count($array) - $level));
+
+    $this->mSubPath =
+        substr($this->mBasePath, strlen($this->mTopPath) + 1, 256);
 
     // Check if the proper parameters are included in the query
     $this->mRegistered = 
@@ -110,6 +114,11 @@ class PageManager extends LayoutController
   public function getTopPath()
   {
     return $this->mTopPath; 
+  }
+
+  public function getSubPath()
+  {
+    return $this->mSubPath; 
   }
 
   public function isRegistered()
