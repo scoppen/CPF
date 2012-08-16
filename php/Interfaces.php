@@ -49,6 +49,13 @@ interface IPageNode
   function draw($cssClass = "");
 }
 
+interface IComponent extends IPageNode
+{
+  function getComponentType();  
+  function preDraw();
+  function postDraw();
+}
+
 interface IPageDBAdapter extends IPageNode
 {
   function configure(IDatabase $database, $tableName);

@@ -1,10 +1,10 @@
 <?php
 /**
- * @name NavSideBar class for CPF
- * @version 0.5 [July 23, 2012]
+ * @name NavPages class for CPF
+ * @version 0.6 [August 16, 2012]
  * @author Scott W Coppen
  * @fileoverview
- * Uses list of pages to populate navigation sidebar entries
+ * Uses list of pages to populate navigation entries
  */
 
 /*
@@ -27,7 +27,7 @@ require_once("CPF/php/UI/ListSet.class.php");
 require_once("CPF/php/IO/FileUtils.class.php");
 
 
-class NavSideBar extends ListSet
+class NavPages extends ListSet implements IComponent
 {
   private $mPageMgr;
   private $mSubPages;
@@ -52,9 +52,11 @@ class NavSideBar extends ListSet
 
   private function __clone() { }
   
-  protected function drawPreListContent() { }
+  public function getComponentType() { return "ListSet"; }
   
-  protected function drawPostListContent() { }
+  public function preDraw() { }
+  
+  public function postDraw() { }
 
   public function draw($extraCSSclass = "")
   {
@@ -71,13 +73,9 @@ class NavSideBar extends ListSet
     else if (in_array($subPath, $this->mSubDirs))
       $this->setActiveListItemKey(array_search($subPath, $this->mSubDirs)); */
     
-    echo "<div class='well' style='padding: 8px 0;'>";
-
-    $this->drawPreListContent();
+    $this->preDraw();
     parent::draw('nav '.$extraCSSclass);
-    $this->drawPostListContent();
-    
-    echo "</div>";
+    $this->postDraw();
   }
 
   protected function drawListItem($label, $href, $extraCSSclass)

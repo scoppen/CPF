@@ -1,10 +1,10 @@
 <?php
 /**
- * @name NavBar class for CPF
- * @version 0.5 [July 23, 2012]
+ * @name NavDirectories class for CPF
+ * @version 0.6 [August 16, 2012]
  * @author Scott W Coppen
  * @fileoverview
- * Uses list of sub-directories to populate navigation bar entries
+ * Uses list of sub-directories to populate navigation entries
  */
 
 /*
@@ -27,7 +27,7 @@ require_once("CPF/php/UI/ListSet.class.php");
 require_once("CPF/php/IO/FileUtils.class.php");
 
 
-class NavBar extends ListSet
+class NavDirectories extends ListSet implements IComponent
 {
   private $mPageMgr;
   private $mSubDirs;
@@ -57,9 +57,11 @@ class NavBar extends ListSet
     return $this->mSubDirs;
   }
 
-  protected function drawPreListContent() { }
+  public function getComponentType() { return "ListSet"; }
+
+  public function preDraw() { }
   
-  protected function drawPostListContent() { }
+  public function postDraw() { }
 
   public function draw($extraCSSclass = "")
   {
@@ -76,21 +78,13 @@ class NavBar extends ListSet
     else if (in_array($subPath, $this->mSubDirs))
       $this->setActiveListItemKey(array_search($subPath, $this->mSubDirs));
 
-    echo "<div class='navbar ".$extraCSSclass."'>" . PHP_EOL;
-    echo "<div class='navbar-inner'><div class='container'>" . PHP_EOL;
-   
-    $this->drawPreListContent();
-    parent::draw('nav');
-    $this->drawPostListContent();
-
-    echo "</div></div></div>" . PHP_EOL; 
+    $this->preDraw();
+    parent::draw('nav '.$extraCSSclass);
+    $this->postDraw();
   }
 
   protected function drawListItem($label, $href, $extraCSSclass)
   {
-    //if ($href !== ucfirst($href))
-    //  return;
-
     parent::drawListItem(ucwords($label), $this->mPageMgr->getTopPath()."/".$href, $extraCSSclass);
   }
 }

@@ -96,10 +96,7 @@ class HTMLFormatter
 
     echo "<link rel=stylesheet type=text/css"
         ." href='".$this->mStylePath."/stylesheet.css'>" . PHP_EOL;
-//    echo "<link rel=stylesheet type=text/css"
-//        ." href='".$this->mStylePath."/bootstrap.css'>" . PHP_EOL;
-//    echo "<link rel=stylesheet type=text/css"
-//        ." href='".$this->mStylePath."/bootstrap-responsive.css'>" . PHP_EOL;
+    
     $this->defineHeaderScripts($uri);
     $this->mPageLevel = 1;
   }
