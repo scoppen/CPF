@@ -1,7 +1,7 @@
 <?php
 /**
  * @name LayoutController class for CPF
- * @version 0.5 [July 14, 2012]
+ * @version 0.6 [August 16, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Controller class for basic webpage layouts (1, 2, and 3 vertical 'panes'
@@ -39,7 +39,6 @@ abstract class LayoutController extends HTMLFormatter
       $leftSideBarWidth, $rightSideBarWidth, $padding = 8)
   {
     parent::__construct($stylePath, 0);
-    $this->mPageTitle = $pageTitle;
     $this->mPageMinWidth = $pageMinWidth;
     $this->mLeftSideBarWidth = $leftSideBarWidth;
     $this->mRightSideBarWidth = $rightSideBarWidth;
@@ -60,11 +59,17 @@ abstract class LayoutController extends HTMLFormatter
 
   public function getLeftSideBarWidth()
   {
+    if (($this->getPageWidth() - $this->mPageMinWidth - $this->getRightSideBarWidth()) < $this->mLeftSideBarWidth)
+      return 0;
+
     return $this->mLeftSideBarWidth;
   }
 
   public function getRightSideBarWidth()
   {
+    if (($this->getPageWidth() - $this->mPageMinWidth - $this->mLeftSideBarWidth) < $this->mRightSideBarWidth)
+      return 0;
+
     return $this->mRightSideBarWidth;
   }
 
@@ -79,13 +84,13 @@ abstract class LayoutController extends HTMLFormatter
 
     case 2:	// Center panel (content) 
       return $this->getPageWidth() - 
-          $this->mLeftSideBarWidth - $this->mRightSideBarWidth;
+          $this->getLeftSideBarWidth() - $this->getRightSideBarWidth();
 
     case 3:	// Left sidebar 
-      return $this->mLeftSideBarWidth;
+      return $this->getLeftSideBarWidth();
 
     case 4:	// Right sidebar
-      return $this->mRightSideBarWidth;
+      return $this->getRightSideBarWidth();
     }
 
     return 0;
@@ -120,13 +125,12 @@ abstract class LayoutController extends HTMLFormatter
     
     $pageWidth = $this->mPageMinWidth + $this->mLeftSideBarWidth + $this->mRightSideBarWidth; 
     $pageMinWidth = ($screenWidth < $pageWidth) ? $screenWidth : $pageWidth;
+//    $pageMinWidth = 720;
 
-    echo "<style type=text/css>" . PHP_EOL;
-    echo "<!--" . PHP_EOL;
+    echo "<style type='text/css' title='main_layout'>" . PHP_EOL;
     echo "body { "
         ."margin: 0; padding: 0; border: 0; width: 100%; "
         ."font-family: Tahoma, Arial, Veranda; "
-//        ."text-align: center; "
         ."font-size: 80%; "
         ."background: #fff; "
         ."min-width: " . $pageMinWidth . "px; "
@@ -139,21 +143,15 @@ abstract class LayoutController extends HTMLFormatter
         ."}" . PHP_EOL;
     echo "#header { "
         ."clear: both; float: left; width: 100%; "
-//        ."border-bottom: 1px solid #000; "
         ."}" . PHP_EOL;
     echo "#menu { "
         ."width: " . $pageMinWidth . "px; "
         ."height: 40px; "
         ."}" . PHP_EOL;
-
-    // TODO: Determine layout based on screen dimensions
-    $this->layoutThreeColumn();
-
     echo "#footer { "
         ."clear: both; float: left; width: 100%; "
         ."border-top: 1px solid #111; "
         ."}" . PHP_EOL;
-    echo "-->" . PHP_EOL;
     echo "</style>" . PHP_EOL;
     
     $this->beginBody();
@@ -168,12 +166,10 @@ abstract class LayoutController extends HTMLFormatter
     $this->mLeftSideBarWidth = 0;
     $this->mRightSideBarWidth = 0;
 
-    echo "<style type=text/css>" . PHP_EOL;
-    echo "<!--" . PHP_EOL;
+    echo "<style type='text/css' title='main_layout'>" . PHP_EOL;
     echo "body { "
         ."margin: 0; padding: 0; border: 0; width: 100%; "
         ."font-family: Tahoma, Arial, Veranda; "
-//        ."text-align: center; "
         ."font-size: 80%; "
         ."background: #fff; "
         ."min-width: " . $pageMinWidth . "px; "
@@ -199,7 +195,6 @@ abstract class LayoutController extends HTMLFormatter
         ."clear: both; float: left; width: 100%; "
         ."border-top: 1px solid #000; "
         ."}" . PHP_EOL;
-    echo "-->" . PHP_EOL;
     echo "</style>" . PHP_EOL;
     
     $this->beginBody();
@@ -208,58 +203,6 @@ abstract class LayoutController extends HTMLFormatter
   public function endPopup()
   {
     parent::endPage();
-  }
-
-  private function layoutThreeColumn()
-  {
-    $pageLeftMargin = -$this->mRightSideBarWidth;
-    $centerColumnLeftMargin = $this->mLeftSideBarWidth + $this->mPadding;
-    $centerColumnRightMargin = $this->mRightSideBarWidth + $this->mPadding;
-    $leftColumnLeftOffset = $this->mLeftSideBarWidth + $this->mRightSideBarWidth;
-    $leftColumnLeftPadding = $this->mPadding;
-    $leftColumnContentWidth = $this->mLeftSideBarWidth - 2 * $this->mPadding;
-    $rightColumnRightSpacing = 3 * $this->mPadding;
-    $rightColumnContentWidth = $this->mRightSideBarWidth - 2 * $this->mPadding;
-
-    echo ".colmask { "
-        ."position: relative; clear: both; float: left; "
-        ."width: 100%; overflow: hidden; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn { "
-        ."background: #fff; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .hidden { "
-        ."visibility: hidden; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .colcenter { "
-        ."float: left; position: relative; width: 200%; right: 100%; "
-        ."margin-left: " . $pageLeftMargin . "px; "
-        ."background: #fff; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .colleft { "
-        ."float: left; position: relative; width: 100%; margin-left: -50%; "
-        ."left: " . $leftColumnLeftOffset . "px; "
-//        ."background: #f0f0f0; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .col1wrap { "
-        ."float: left; position: relative; width: 50%; "
-        ."right: " . $this->mLeftSideBarWidth . "px; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .col1 { "
-        ."position: relative; overflow: hidden; left: 200%; "
-        ."margin-left: " . $centerColumnLeftMargin . "px; "
-        ."margin-right: " . $centerColumnRightMargin . "px; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .col2 { "
-        ."float: left; float: right; position: relative; "
-        ."width: " . $leftColumnContentWidth . "px; "
-        ."right: " . $leftColumnLeftPadding . "px; "
-        ."}" . PHP_EOL;
-    echo ".threecolumn .col3 { "
-        ."float: left; float: right; position: relative; left: 50%; "
-        ."width: " . $rightColumnContentWidth . "px; "
-        ."margin-right: " . $rightColumnRightSpacing . "px; "
-        ."}" . PHP_EOL;
   }
 
   private function layoutOneColumn()
@@ -295,7 +238,7 @@ abstract class LayoutController extends HTMLFormatter
         ."}" . PHP_EOL;
     echo ".threecolumn .col1wrap { "
         ."float: left; position: relative; width: 50%; "
-        ."right: " . $this->mLeftSideBarWidth . "px; "
+        ."right: " . $this->getLeftSideBarWidth() . "px; "
         ."}" . PHP_EOL;
     echo ".threecolumn .col1 { "
         ."position: relative; overflow: hidden; left: 200%; "

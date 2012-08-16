@@ -1,6 +1,6 @@
 /**
  * @name PageManger for CPF
- * @version 0.5 [July 14, 2012]
+ * @version 0.6 [August 16, 2012]
  * @author Scott Coppen
  * @fileoverview
  * AJAX handler for CPF (Content Presentation Framework) PageManager 
@@ -29,6 +29,53 @@ function PageManager(page) {
     this.page = page;
 
     xmlhttp = getXmlHttpObject();
+    
+    this.setPageLayout = function(params) {
+        var lsbw = params.left_sidebar_width;
+        var rsbw = params.right_sidebar_width;
+
+        // Remove sidebar(s) if screen size cannot accomodate (left goes first)
+        if ((this.getWidth() - params.min_width - rsbw) < lsbw)
+            lsbw = 0;
+        
+        if ((this.getWidth() - params.min_width - lsbw) < rsbw) 
+            rsbw = 0;
+
+        // Compute stylesheet parameters
+        var plm = -rsbw;
+        var cclm = lsbw + params.padding;
+        var ccrm = rsbw + params.padding;
+        var lclo = lsbw + rsbw;
+        var lclp = params.padding;
+        var lccw = lsbw - 2 * params.padding;
+        var rcrs = 3 * params.padding;
+        var rccw = rsbw - 2 * params.padding;
+
+        // Insert stylesheet attributes for 3-column layout
+        var ss = getStyleSheetByTitle('main_layout');
+        appendStyleSheetRule(ss,'.colmask',
+            'position: relative; clear: both; float: left; width: 100%; overflow: hidden');
+        appendStyleSheetRule(ss,'.threecolumn .hidden',
+            'visibility: hidden');
+        appendStyleSheetRule(ss,'.threecolumn .colcenter',
+            'float: left; position: relative; width: 200%; right: 100%; ' +
+            'margin-left: ' + plm + 'px; background: #fff');
+        appendStyleSheetRule(ss,'.threecolumn .colleft',
+            'float: left; position: relative; width: 100%; margin-left: -50%; ' +
+            'left: ' + lclo + 'px');
+        appendStyleSheetRule(ss,'.threecolumn .col1wrap',
+            'float: left; position: relative; width: 50%; ' +
+            'right: ' + lsbw + 'px');
+        appendStyleSheetRule(ss,'.threecolumn .col1',
+            'position: relative; overflow: hidden; left: 200%; ' +
+            'margin-left: ' + cclm + 'px; margin-right: ' + ccrm + 'px');
+        appendStyleSheetRule(ss,'.threecolumn .col2',
+            'float: left; float: right; position: relative; ' +
+            'width: ' + lccw + 'px; right: ' + lclp + 'px');
+        appendStyleSheetRule(ss,'.threecolumn .col3',
+            'float: left; float: right; position: relative; left: 50% ' +
+            'width: ' + rccw + 'px; margin-right: ' + rcrs + 'px');
+    }
 
     this.getWidth = function() {
         if (self.innerWidth) // all except IE
@@ -64,8 +111,9 @@ function PageManager(page) {
         }
     }
 
-    this.loadPageContent = function(callback) {
+    this.loadPageContent = function(callback, params) {
         onPageContentLoaded = callback;
+        this.setPageLayout(params);
         var url = this.page;
         url = url + '&window_width=' + this.getWidth();
         url = url + '&window_height=' + this.getHeight();

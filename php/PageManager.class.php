@@ -1,7 +1,7 @@
 <?php
 /**
  * @name PageManager class for CPF
- * @version 0.5 [July 14, 2012]
+ * @version 0.6 [August 16, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Class for handling page management functions (basic setup, script
@@ -198,13 +198,15 @@ class PageManager extends LayoutController
         ."       pageManager = new PageManager('".$uri."');" . PHP_EOL
         ."    });" . PHP_EOL
         ."</script>" . PHP_EOL; 
-    
+
+    global $gLayoutConfig;
+
     echo "<script type='text/javascript' language='javascript'>" . PHP_EOL
         ."  window.onload = function(){ " . PHP_EOL
         ."    var interval = setInterval(function() { " . PHP_EOL
         ."      if (typeof pageManager != 'undefined') { " . PHP_EOL
         ."        clearInterval(interval);" . PHP_EOL
-        ."        loadPage();" . PHP_EOL
+        ."        loadPage(".json_encode($gLayoutConfig).");" . PHP_EOL
         ."      } " . PHP_EOL
         ."    }, 50);" . PHP_EOL
         ."  };" . PHP_EOL

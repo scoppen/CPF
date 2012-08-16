@@ -1,6 +1,6 @@
 /**
  * @name Page scripts for CPF
- * @version 0.5 [July 14, 2012]
+ * @version 0.6 [August 16, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Generic page scripts for CPF (Content Presentation Framework)
@@ -59,16 +59,34 @@ function addScript(scriptSrc, callback)
   head.insertBefore(script, head.firstChild);
 }
 
-function addStylesheet(filename, cssType)
+function addStyleSheet(filename, cssType)
 {
-  var head = document.getElementsByTabName('head')[0];
-  link = document.createElement('link');
+  var head = document.getElementsByTagName('head')[0] || document.documentElement;
+  var link = document.createElement('link');
   link.href = filename;
   link.rel = 'stylesheet';
   link.type = cssType;
   link.media = 'all';
 
   head.appendChild(link);
+}
+
+function getStyleSheetByTitle(title)
+{
+  for(var i=0; i<document.styleSheets.length; i++) {
+    var sheet = document.styleSheets[i];
+    if(sheet.title == title) {
+      return sheet;
+    }
+  }
+}
+
+function appendStyleSheetRule(stylesheet, selector, rule)
+{
+  if (document.all)  // IE
+    stylesheet.addRule(selector, rule);
+  else
+    stylesheet.insertRule('' + selector + ' { ' + rule + ' }', stylesheet.cssRules.length);
 }
 
 function submitForm(form)
