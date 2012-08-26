@@ -1,6 +1,6 @@
 /**
  * @name PageManger for CPF
- * @version 0.6 [August 16, 2012]
+ * @version 0.6 [August 26, 2012]
  * @author Scott Coppen
  * @fileoverview
  * AJAX handler for CPF (Content Presentation Framework) PageManager 
@@ -24,6 +24,7 @@
 
 var xmlhttp;
 var onPageContentLoaded;
+var onPostPageLoaded;
 
 function PageManager(page) {
     this.page = page;
@@ -107,7 +108,16 @@ function PageManager(page) {
                 document.getElementById('content_body').innerHTML =
                     xmlhttp.responseText; 
                 onPageContentLoaded();
+                if (onPostPageLoaded)
+                    onPostPageLoaded();
             }
+        }
+    }
+
+    this.setOnPostPageLoaded = function(callback) {
+        var getType = {};
+        if (callback && getType.toString.call(callback) == '[object Function]') {
+            onPostPageLoaded = callback;
         }
     }
 

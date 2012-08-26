@@ -1,7 +1,7 @@
 <?php
 /**
  * @name PageManager class for CPF
- * @version 0.6 [August 16, 2012]
+ * @version 0.6 [August 26, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Class for handling page management functions (basic setup, script
@@ -38,6 +38,7 @@ class PageManager extends LayoutController
   private $mPageHeight;
   private $mPageURI;
   private $mPageScripts;
+  private $mPostScript;
   private $mPlugInScripts;
   private $mPlugInStyles;
  
@@ -90,6 +91,7 @@ class PageManager extends LayoutController
 
     $this->mPageURI = "";
     $this->mPageScripts = array();
+    $this->mPostScript = "";
     $this->mPlugInScripts = array();
     $this->mPlugInStyles = array();
   }
@@ -195,8 +197,14 @@ class PageManager extends LayoutController
         ."  var pageManager;" . PHP_EOL
         ."  addScript('".$this->getScriptPath()."/page_manager.js'," . PHP_EOL
         ."    function() {" . PHP_EOL
-        ."       pageManager = new PageManager('".$uri."');" . PHP_EOL
-        ."    });" . PHP_EOL
+        ."       pageManager = new PageManager('".$uri."');" . PHP_EOL;
+
+    if ($this->mPostScript)
+    {
+        echo  "       pageManager.setOnPostPageLoaded(function() { ".$this->mPostScript." });" . PHP_EOL;
+    }
+
+    echo "    });" . PHP_EOL
         ."</script>" . PHP_EOL; 
 
     global $gLayoutConfig;
@@ -217,6 +225,11 @@ class PageManager extends LayoutController
       echo "<link rel='stylesheet' type='text/css' "
           ."href='/CPF/plugins/".$value."'></link>" . PHP_EOL;
     }
+  }
+
+  protected function setPostPageContentLoadedScript($script)
+  {
+    $this->mPostScript = $script;
   }
 
   protected function displayHeader()
