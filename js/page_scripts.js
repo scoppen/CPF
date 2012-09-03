@@ -110,3 +110,12 @@ function getXmlHttpObject()
   return xmlhttp;
 }
 
+function htmlspecialchars_decode(string)
+{
+  string = string.toString()
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')    // Replace HTML tag encodings
+    .replace(/&quot;/g, '"')                        // Replace double-quotes
+    .replace(/&amp;/g, '&');                        // Replace ampersands
+ 
+  return string;
+}
