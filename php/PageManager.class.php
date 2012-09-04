@@ -237,6 +237,11 @@ class PageManager extends LayoutController
 
   }
 
+  protected function displayPreContent()
+  {
+
+  }
+
   protected function displayLeftSideBar()
   {
 
@@ -273,6 +278,7 @@ class PageManager extends LayoutController
       parent::beginPageHeader();
       $this->displayHeader();
       parent::beginPageContent();
+      $this->displayPreContent();
     }
     else
     {
