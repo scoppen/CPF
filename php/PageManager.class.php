@@ -1,7 +1,7 @@
 <?php
 /**
  * @name PageManager class for CPF
- * @version 0.6 [August 26, 2012]
+ * @version 0.6 [September 4, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Class for handling page management functions (basic setup, script
@@ -148,10 +148,10 @@ class PageManager extends LayoutController
     $this->mPageScripts[] = $scriptFile;
   }
 
-  public function addPlugIn($plugInDir)
+  public function addPlugIn($plugIn)
   {
-    include_once("CPF/plugins/".$plugInDir."/manifest.php");
-    $dependencies = getPlugInDependencies();
+    include_once("CPF/plugins/".$plugIn."/manifest.php");
+    $dependencies = $plugIn::getPlugInDependencies();
 
     if (!array_key_exists('types', $dependencies))
       return;
@@ -161,7 +161,7 @@ class PageManager extends LayoutController
     {
       foreach ($dependencies['js'] as &$value)
       {
-        $jsfile = $plugInDir."/".$value;
+        $jsfile = $plugIn."/".$value;
         $this->mPlugInScripts[] = $jsfile;
       }
     }
@@ -171,7 +171,7 @@ class PageManager extends LayoutController
     {
       foreach ($dependencies['css'] as &$value)
       {
-        $cssfile = $plugInDir."/".$value;
+        $cssfile = $plugIn."/".$value;
         $this->mPlugInStyles[] = $cssfile;
       }
     }
@@ -251,7 +251,7 @@ class PageManager extends LayoutController
   {
     echo "<p align='right'>Data presented using "
         ."<a href='http://www.github.com/scoppen/CPF'>CPF</a>"
-        ." v0.5&nbsp;&nbsp;";
+        ." v0.6&nbsp;&nbsp;";
   }
 
   public function beginPage($title, $uri = "", $screenWidth = 800, $screenHeight = 400)

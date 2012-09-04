@@ -1,7 +1,7 @@
 <?php
 /**
  * @name Interfaces for CPF
- * @version 0.5 [July 14, 2012]
+ * @version 0.6 [September 4, 2012]
  * @author Scott W Coppen
  * @fileoverview
  * Interfaces used in CPF (Content Presentation Framework)
@@ -59,6 +59,11 @@ interface IComponent extends IPageNode
 interface IPageDBAdapter extends IPageNode
 {
   function configure(IDatabase $database, $tableName);
+}
+
+interface IPlugInManifest
+{
+  static function getPlugInDependencies();
 }
 
 ?>
