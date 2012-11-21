@@ -60,7 +60,7 @@ function PageManager(page) {
             'visibility: hidden');
         appendStyleSheetRule(ss,'.threecolumn .colcenter',
             'float: left; position: relative; width: 200%; right: 100%; ' +
-            'margin-left: ' + plm + 'px; background: #fff');
+            'margin-left: ' + plm + 'px; background: inherit');
         appendStyleSheetRule(ss,'.threecolumn .colleft',
             'float: left; position: relative; width: 100%; margin-left: -50%; ' +
             'left: ' + lclo + 'px');
