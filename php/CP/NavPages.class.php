@@ -60,19 +60,17 @@ class NavPages extends ListSet implements IComponent
 
   public function draw($extraCSSclass = "")
   {
-    $basePath = $this->mPageMgr->getBasePath();
-    $topPath = $this->mPageMgr->getTopPath();
-    $subPath = $this->mPageMgr->getSubPath();
-
     $this->setListItems($this->mSubPages);
 
-    // TODO: Determine active list item key
-    /* $active = (strcmp($basePath, $topPath) == 0);
-    if ($active != FALSE)
-      $this->setActiveListItemKey('Home');
-    else if (in_array($subPath, $this->mSubDirs))
-      $this->setActiveListItemKey(array_search($subPath, $this->mSubDirs)); */
-    
+    // Determine web page filename
+    $pageURI = explode('?', $this->mPageMgr->getPageURI());
+    $path = explode('/', $pageURI[0]);
+    $page = $path[count($path) - 1];
+
+    // Mark current web page 'active' in list
+    if (in_array($page, $this->mSubPages))
+      $this->setActiveListItemKey(array_search($page, $this->mSubPages));
+
     $this->preDraw();
     parent::draw('nav '.$extraCSSclass);
     $this->postDraw();
