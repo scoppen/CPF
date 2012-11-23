@@ -59,7 +59,7 @@ abstract class LayoutController extends HTMLFormatter
 
   public function getLeftSideBarWidth()
   {
-    if (($this->getPageWidth() - $this->mPageMinWidth - $this->getRightSideBarWidth()) < $this->mLeftSideBarWidth)
+    if (($this->getPageWidth() - $this->mPageMinWidth - $this->mRightSideBarWidth) < $this->mLeftSideBarWidth)
       return 0;
 
     return $this->mLeftSideBarWidth;
@@ -67,7 +67,7 @@ abstract class LayoutController extends HTMLFormatter
 
   public function getRightSideBarWidth()
   {
-    if (($this->getPageWidth() - $this->mPageMinWidth - $this->mLeftSideBarWidth) < $this->mRightSideBarWidth)
+    if (($this->getPageWidth() - $this->mPageMinWidth - $this->getLeftSideBarWidth()) < $this->mRightSideBarWidth)
       return 0;
 
     return $this->mRightSideBarWidth;
@@ -129,16 +129,15 @@ abstract class LayoutController extends HTMLFormatter
 
     echo "<style type='text/css' title='main_layout'>" . PHP_EOL;
     echo "body { "
-        ."margin: 0; padding: 0; border: 0; width: 100%; "
-        ."font-family: Tahoma, Arial, Veranda; "
-        ."font-size: 80%; "
-        ."background: #fff; "
+//        ."margin: 0; padding: 0; border: 0; width: 100%; "
+//        ."font-family: Tahoma, Arial, Veranda; "
+//        ."font-size: 80%; "
+//        ."background: #fff; "
         ."min-width: " . $pageMinWidth . "px; "
         ."max-width: " . 2 * $pageMinWidth . "px; "
         ."}" . PHP_EOL;
     echo "#content_body { "
 //        ."width: " . $pageMinWidth . "px; "
-//        ."height: 100%; "
         ."margin: 0 auto; padding-bottom: 10px; "
         ."}" . PHP_EOL;
     echo "#header { "
@@ -150,7 +149,7 @@ abstract class LayoutController extends HTMLFormatter
         ."}" . PHP_EOL;
     echo "#footer { "
         ."clear: both; float: left; width: 100%; "
-        ."border-top: 1px solid #111; "
+//        ."border-top: 1px solid #111; "
         ."}" . PHP_EOL;
     echo "</style>" . PHP_EOL;
     
@@ -221,7 +220,7 @@ abstract class LayoutController extends HTMLFormatter
         ."width: 100%; overflow: hidden; "
         ."}" . PHP_EOL;
     echo ".threecolumn { "
-        ."background: #ff9; "
+        ."background: inherit; "
         ."}" . PHP_EOL;
     echo ".threecolumn .hidden { "
         ."visibility: hidden; "
@@ -229,12 +228,12 @@ abstract class LayoutController extends HTMLFormatter
     echo ".threecolumn .colcenter { "
         ."float: left; position: relative; width: 200%; right: 100%; "
         ."margin-left: " . $pageLeftMargin . "px; "
-        ."background: #fef; "
+//        ."background: #fef; "
         ."}" . PHP_EOL;
     echo ".threecolumn .colleft { "
         ."float: left; position: relative; width: 100%; margin-left: -50%; "
         ."left: " . $leftColumnLeftOffset . "px; "
-        ."background: #FFD8B7; "
+        ."background-color: inherit; "
         ."}" . PHP_EOL;
     echo ".threecolumn .col1wrap { "
         ."float: left; position: relative; width: 50%; "
