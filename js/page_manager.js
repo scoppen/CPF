@@ -74,7 +74,7 @@ function PageManager(page) {
             'float: left; float: right; position: relative; ' +
             'width: ' + lccw + 'px; right: ' + lclp + 'px');
         appendStyleSheetRule(ss,'.threecolumn .col3',
-            'float: left; float: right; position: relative; left: 50% ' +
+            'float: right; position: relative; left: 50%; ' +
             'width: ' + rccw + 'px; margin-right: ' + rcrs + 'px');
     }
 
