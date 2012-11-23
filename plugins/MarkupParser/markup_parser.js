@@ -355,3 +355,36 @@ MarkupParser.Simple.HTML = function(options) {
 MarkupParser.Simple.HTML.prototype = new MarkupParser.Simple.Base();
 
 MarkupParser.Simple.HTML.prototype.constructor = MarkupParser.Simple.HTML;
+
+MarkupParser.Simple.HTML.parse = function()
+{
+  var parser =
+    new MarkupParser.Simple.HTML({forIE: document.all, linkFormat: ''});
+  
+  var render = function(id) {
+    var html = document.getElementById(id.replace("source","html"));
+    html.innerHTML = '';
+    parser.parse(html, document.getElementById(id).innerHTML);
+  };
+
+  var spans = document.getElementsByTagName("span");
+  for (var i = 0; i < spans.length; i++) {
+    if(spans[i].id.indexOf("markup") == 0){
+      render(spans[i].id);
+    }
+  }
+}
+
+MarkupParser.Simple.HTML.parseByName = function(name)
+{
+  var parser =
+    new MarkupParser.Simple.HTML({forIE: document.all, linkFormat: ''});
+  
+  var render = function(id) {
+    var html = document.getElementById(id.replace("source","html"));
+    html.innerHTML = '';
+    parser.parse(html, document.getElementById(id).innerHTML);
+  };
+
+  render(document.getElementById('markup_'+name+'_source')[0].id);
+}
