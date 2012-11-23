@@ -29,13 +29,15 @@ class FileUtils
   {
     $dirs = array();
     $files = array_diff(scandir($dirPath), array('.', '..'));
+    
     foreach ($files as $file)
     {
       if (is_dir($dirPath."/".$file))
-        $dirs[] = $file;
+        $dirs[$file] = filemtime($dirPath."/".$file);
     }
 
-    return $dirs;
+    arsort($dirs);
+    return array_flip($dirs);
   }
 
   public static function pathAsArray($dirPath)
