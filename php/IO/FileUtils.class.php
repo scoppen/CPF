@@ -65,11 +65,7 @@ class FileUtils
 
   public static function loadFile($filename)
   {
-    $fd = fopen($filename, 'r');
-    $content = fread($fd, filesize($filename));
-    fclose($fd);
-
-    return $content;
+    return file_get_contents($filename);
   }
 }
 
