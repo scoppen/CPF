@@ -1,7 +1,7 @@
 <?php
 /**
  * @name PageManager class for CPF
- * @version 0.6 [September 4, 2012]
+ * @version 0.7 [May 18, 2013]
  * @author Scott W Coppen
  * @fileoverview
  * Class for handling page management functions (basic setup, script
@@ -38,7 +38,8 @@ class PageManager extends LayoutController
   private $mPageHeight;
   private $mPageURI;
   private $mPageScripts;
-  private $mPostScript;
+  private $mPostLayoutScript;
+  private $mPostLoadedScript;
   private $mPlugInScripts;
   private $mPlugInStyles;
  
@@ -91,7 +92,8 @@ class PageManager extends LayoutController
 
     $this->mPageURI = "";
     $this->mPageScripts = array();
-    $this->mPostScript = "";
+    $this->mPostLayoutScript = "";
+    $this->mPostLoadedScript = "";
     $this->mPlugInScripts = array();
     $this->mPlugInStyles = array();
   }
@@ -199,9 +201,14 @@ class PageManager extends LayoutController
         ."    function() {" . PHP_EOL
         ."       pageManager = new PageManager('".$uri."');" . PHP_EOL;
 
-    if ($this->mPostScript)
+    if ($this->mPostLayoutScript)
     {
-        echo  "       pageManager.setOnPostPageLoaded(function() { ".$this->mPostScript." });" . PHP_EOL;
+        echo  "       pageManager.setOnPostPageLayout(function(width, height) { ".$this->mPostLayoutScript. " })" . PHP_EOL;
+    }
+
+    if ($this->mPostLoadedScript)
+    {
+        echo  "       pageManager.setOnPostPageLoaded(function() { ".$this->mPostLoadedScript." });" . PHP_EOL;
     }
 
     echo "    });" . PHP_EOL
@@ -227,9 +234,14 @@ class PageManager extends LayoutController
     }
   }
 
+  protected function setPostPageLayoutScript($script)
+  {
+    $this->mPostLayoutScript = $script;
+  }
+
   protected function setPostPageContentLoadedScript($script)
   {
-    $this->mPostScript = $script;
+    $this->mPostLoadedScript = $script;
   }
 
   protected function displayHeader()

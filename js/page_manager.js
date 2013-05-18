@@ -1,6 +1,6 @@
 /**
  * @name PageManger for CPF
- * @version 0.6 [August 26, 2012]
+ * @version 0.7 [May 18, 2013]
  * @author Scott Coppen
  * @fileoverview
  * AJAX handler for CPF (Content Presentation Framework) PageManager 
@@ -23,6 +23,7 @@
  */
 
 var xmlhttp;
+var onPostPageLayout;
 var onPageContentLoaded;
 var onPostPageLoaded;
 
@@ -30,7 +31,7 @@ function PageManager(page) {
     this.page = page;
 
     xmlhttp = getXmlHttpObject();
-    
+
     this.setPageLayout = function(params) {
         var lsbw = params.left_sidebar_width;
         var rsbw = params.right_sidebar_width;
@@ -114,6 +115,13 @@ function PageManager(page) {
         }
     }
 
+    this.setOnPostPageLayout = function(callback) {
+        var getType = {};
+        if (callback && getType.toString.call(callback) == '[object Function]') {
+            onPostPageLayout = callback;
+        }
+    }
+
     this.setOnPostPageLoaded = function(callback) {
         var getType = {};
         if (callback && getType.toString.call(callback) == '[object Function]') {
@@ -124,9 +132,16 @@ function PageManager(page) {
     this.loadPageContent = function(callback, params) {
         onPageContentLoaded = callback;
         this.setPageLayout(params);
+
+        var width = this.getWidth();
+        var height = this.getHeight();
+
+        if (onPostPageLayout)
+            onPostPageLayout(width, height);
+
         var url = this.page;
-        url = url + '&window_width=' + this.getWidth();
-        url = url + '&window_height=' + this.getHeight();
+        url = url + '&window_width=' + width;
+        url = url + '&window_height=' + height;
         xmlhttp.onreadystatechange = this.showPageContent;
         xmlhttp.open('GET', url, true);
         xmlhttp.send(null);
