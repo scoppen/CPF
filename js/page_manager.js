@@ -50,7 +50,7 @@ function PageManager(page) {
         var lclo = lsbw + rsbw;
         var lclp = params.padding;
         var lccw = lsbw - 2 * params.padding;
-        var rcrs = 3 * params.padding;
+        var rcrs = ((lsbw == 0) ? 1 : 3) * params.padding;
         var rccw = rsbw - 2 * params.padding;
 
         // Insert stylesheet attributes for 3-column layout
