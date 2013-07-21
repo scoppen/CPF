@@ -85,7 +85,7 @@ class MySQL implements IDatabase
         return true;
     }
    
-    protected function query($dbQuery)
+    protected function query($dbQuery, $forceRefresh = false)
     {
         if (!$this->mDatabase)
         {
@@ -94,7 +94,7 @@ class MySQL implements IDatabase
             return;
         }
 
-        if (isset($this->mQueryResults[$dbQuery]))
+        if (!$forceRefresh && isset($this->mQueryResults[$dbQuery]))
             return $this->mQueryResults[$dbQuery];
 
         $res = mysql_query($dbQuery, $this->mConnection);
@@ -112,9 +112,9 @@ class MySQL implements IDatabase
         return $dbQuery;
     }
 
-    public function select($query)
+    public function select($query, $forceRefresh = false)
     {
-        $rc = $this->query($query);
+        $rc = $this->query($query, $forceRefresh);
         if ($rc == $query)
             return mysql_num_rows($this->mQueryResults[$query]);
 
