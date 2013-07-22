@@ -75,6 +75,11 @@ class HTMLFormatter
     $this->mScriptPath = $path;
   }
 
+  protected function defineHeaderMetaTags($uri)
+  {
+    echo "<meta http-equiv='Content-Type' content='text/html'>" . PHP_EOL;
+  }
+
   protected function defineHeaderScripts($uri)
   {
     echo "<script type='text/javascript'"
@@ -91,8 +96,11 @@ class HTMLFormatter
     echo "<!DOCTYPE HTML>"
         ."<html xmlns='http://www.w3.org/1999/xhtml' "
         ."xml:lang='en' lang='en'>" . PHP_EOL
-        ."<head><meta http-equiv='Content-Type' content='text/html'>" . PHP_EOL
-        ."<title>".$title."</title>" . PHP_EOL;
+        ."<head>" . PHP_EOL;
+
+    $this->defineHeaderMetaTags($uri);
+
+    echo "<title>".$title."</title>" . PHP_EOL;
 
     echo "<link rel=stylesheet type=text/css"
         ." href='".$this->mStylePath."/stylesheet.css'>" . PHP_EOL;

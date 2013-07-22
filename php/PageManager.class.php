@@ -271,7 +271,7 @@ class PageManager extends LayoutController
         ." v0.6&nbsp;&nbsp;";
   }
 
-  public function beginPage($title, $uri = "", $screenWidth = 800, $screenHeight = 400)
+  public function beginPage($title, $uri = "", $minWidth = 400)
   {
     if (empty($uri))
     {
@@ -294,12 +294,12 @@ class PageManager extends LayoutController
     }
     else
     {
-      parent::beginPage($title, $uri, $screenWidth, $screenHeight);
+      parent::beginPage($title, $uri, $minWidth);
       echo "<div id='content_body' name='content_body'></div>" . PHP_EOL;
     }
   }
 
-  public function beginPopup($title, $uri = "", $screenWidth = 800, $screenHeight = 400)
+  public function beginPopup($title, $uri = "", $minWidth = 400)
   {
     if (empty($uri))
     {
@@ -311,7 +311,7 @@ class PageManager extends LayoutController
         $uri .= "&sid=" . $_SERVER['REQUEST_TIME'].mt_rand();
     }
 
-    parent::beginPopup($title, $uri, $screenWidth, $screenHeight);
+    parent::beginPopup($title, $uri, $minWidth);
     echo "<div id='content_body' name='content_body'></div>" . PHP_EOL;
   }
 

@@ -108,6 +108,13 @@ abstract class LayoutController extends HTMLFormatter
     $this->endTableRowData();
   }
 
+  protected function defineHeaderMetaTags($uri)
+  {
+    parent::defineHeaderMetaTags($uri);
+
+    echo "<meta name='viewport' content='initial-scale=0.9,width=device-width' >" . PHP_EOL;
+  }
+
   protected function defineHeaderScripts($uri)
   {
     parent::defineHeaderScripts($uri);
@@ -119,25 +126,19 @@ abstract class LayoutController extends HTMLFormatter
     }
   }
 
-  public function beginPage($title, $uri, $screenWidth, $screenHeight)
+  public function beginPage($title, $uri, $minWidth)
   {
     parent::beginPage($title, $uri);
     
     $pageWidth = $this->mPageMinWidth + $this->mLeftSideBarWidth + $this->mRightSideBarWidth; 
-    $pageMinWidth = ($screenWidth < $pageWidth) ? $screenWidth : $pageWidth;
-//    $pageMinWidth = 720;
+    $pageMinWidth = ($pageWidth > $minWidth) ? $minWidth : $pageWidth;
 
     echo "<style type='text/css' title='main_layout'>" . PHP_EOL;
     echo "body { "
-//        ."margin: 0; padding: 0; border: 0; width: 100%; "
-//        ."font-family: Tahoma, Arial, Veranda; "
-//        ."font-size: 80%; "
-//        ."background: #fff; "
         ."min-width: " . $pageMinWidth . "px; "
-        ."max-width: " . 2 * $pageMinWidth . "px; "
+        ."max-width: " . 4 * $pageMinWidth . "px; "
         ."}" . PHP_EOL;
     echo "#content_body { "
-//        ."width: " . $pageMinWidth . "px; "
         ."margin: 0 auto; padding-bottom: 10px; "
         ."}" . PHP_EOL;
     echo "#header { "
