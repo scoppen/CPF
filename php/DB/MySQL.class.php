@@ -40,25 +40,29 @@ class MySQL implements IDatabase
 
     private function __clone() { }
 
-    public function isConnected() { return $this->mConnection; }
+    public function isConnected() {
+                                    if (!$this->mConnection) return;
+                                      return $this->mConnection->connect_errno;
+                                  }
 
     public function getDatabase() { return $this->mDatabase; }
 
     public function getLastError() { return $this->mLastError; }
 
-    protected function connect($dbServer, $user, $passwd)
+    protected function connect($dbServer, $user, $passwd, $dbName)
     {
-        $this->mConnection = mysql_connect($dbServer, $user, $passwd);
-        if (!$this->mConnection)
+        $this->mConnection = @new mysqli($dbServer, $user, $passwd, $dbName);
+        if ($this->mConnection->connect_errno)
         {
-            $this->mLastError = mysql_error();
-	    error_log("MySQL::Connect() failed - ".$this->mLastError);
+            $this->mLastError = $this->mConnection->connect_error;
+	    error_log("MySQL::Connect() failed - ".$this->mLastError." CODE - ".$this->mConnection->connect_errno);
             return false;
         }
 
         if ($this->mLogFile)
             error_log("MySQL::Connect() to ".$dbServer." succeeded",
                       3, $this->mLogFile);
+        $this->mDatabase = $dbName;
         return true;
     }
 
@@ -71,9 +75,10 @@ class MySQL implements IDatabase
             return false;
         }
 
-        if (!mysql_select_db($dbName, $this->mConnection))
+        $this->mConnection->select_db($dbName);
+        if (!$this->query('SELECT DATABASE()') !== $dbName)
         {
-            $this->mLastError = mysql_error();
+            $this->mLastError = $this->mConnection->error;
             error_log("MySQL::open() failed - ".$this->mLastError);
             return false;
         }
@@ -97,10 +102,10 @@ class MySQL implements IDatabase
         if (!$forceRefresh && isset($this->mQueryResults[$dbQuery]))
             return $this->mQueryResults[$dbQuery];
 
-        $res = mysql_query($dbQuery, $this->mConnection);
+        $res = $this->mConnection->query($dbQuery);
         if (!$res)
         {
-            $this->mLastError = mysql_error();
+            $this->mLastError = $this->mConnection->error;
             error_log("MySQL::".$this->mLastError);
             return;
         }
@@ -116,7 +121,7 @@ class MySQL implements IDatabase
     {
         $rc = $this->query($query, $forceRefresh);
         if ($rc == $query)
-            return mysql_num_rows($this->mQueryResults[$query]);
+            return $this->mQueryResults[$query]->num_rows;
 
         return $rc;
     }
@@ -240,7 +245,7 @@ class MySQL implements IDatabase
                 ."WHERE `TABLE_SCHEMA`='".$this->mDatabase."' "
                 ."  AND `TABLE_NAME`='".$tableName."' ";
 
-        $res = mysql_query($query, $this->mConnection);
+        $res = $this->connction->query($query);
         if (!$res)
         {
             $this->mLastError = mysql_error();
@@ -385,7 +390,7 @@ class MySQL implements IDatabase
             return false;
         }
 
-        $row = mysql_fetch_array($this->mQueryResults[$queryId]);
+        $row = $this->mQueryResults[$queryId]->fetch_array();
         if (!$row)
             $this->mQueryResults[$queryId] = '';
 
