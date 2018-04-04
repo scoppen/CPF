@@ -1,5 +1,7 @@
-CPF
+CPF 5.3
 ===
+
+Notice: This project has been deprecated by all the great efforts and contributions to the node, React.js, and Bootstrap/Reactstrap projects.  This does require switching from PHP to Javascript, but it worth it since with Javacript, the world of Node and React-native, Meteor, and Electron are possible (same codebase for smartphone app (iOS and Android), desktop app, and web app.
 
 Content Presentation Framework for webpages (pronounced 'see-puff')
 
